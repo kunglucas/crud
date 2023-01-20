@@ -1,4 +1,6 @@
-
+/*
+Core file to handle all actions on the crud application.
+*/
 var express = require('express');
 
 var router = express.Router();
@@ -6,6 +8,12 @@ var router = express.Router();
 var database = require('../database');
 
 router.get("/", function(request, response, next){
+
+	response.render("sample_data", {title:'Enter login credentials', action:'list'});
+
+});
+
+router.get("/LoggedIn", function(request, response, next){
 
 	var query = "SELECT * FROM sample_data ORDER BY id ASC";
 
@@ -17,7 +25,7 @@ router.get("/", function(request, response, next){
 		}
 		else
 		{
-			response.render('sample_data', {title:'Kenneth & Lucas CRUD application', action:'list', sampleData:data});
+			response.render('sample_data', {title:'Kenneth & Lucas CRUD application', action:'LoggedIn', sampleData:data});
 		}
 
 	});
@@ -54,7 +62,7 @@ router.post("/add_sample_data", function(request, response, next){
 		}	
 		else
 		{
-			response.redirect("/sample_data");
+			response.redirect("/sample_data/LoggedIn");
 		}
 
 	});
