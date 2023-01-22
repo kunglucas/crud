@@ -94,13 +94,12 @@ router.post("/add_sample_data", function(request, response, next){
 
 });
 
-//User login handeling.
+//User logon handeling.
 router.post("/login_sample_data", function(request, response, next){
 
 	var mail = request.body.email;
-
+    var online = new Date().getTime();
 	var password = request.body.password;
-
 	var query = `SELECT * FROM sample_data WHERE email="${mail}" AND password="${password}"`;
 
 	database.query(query, function(error, data){
@@ -112,8 +111,19 @@ router.post("/login_sample_data", function(request, response, next){
 		else
 		{
             if(data.length > 0)
-            {
-                response.redirect(`/sample_data/LoggedIn?username=${mail}`);   
+            {   
+                //Update timestamp when user logon.
+                var query = `UPDATE sample_data SET last_seen=current_timestamp() WHERE email="${mail}"`;
+                database.query(query, function(error, data){
+                    if(error)
+                    {
+                        throw error;
+                    }	
+                    else 
+                    {
+                        response.redirect(`/sample_data/LoggedIn?username=${mail}`); 
+                    }
+                });  
             }
             else 
             {
