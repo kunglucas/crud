@@ -13,6 +13,18 @@ router.get("/", function(request, response, next){
 
 });
 
+router.get("/Error", function(request, response, next){
+
+	response.render("sample_data", {title:'Faulty login credentials', action:'Error'});
+
+});
+
+router.get("/UserError", function(request, response, next){
+
+	response.render("sample_data", {title:'Faulty login credentials', action:'User'});
+
+});
+
 router.get("/LoggedIn", function(request, response, next){
 
 	var query = "SELECT * FROM sample_data ORDER BY id ASC";
@@ -31,7 +43,7 @@ router.get("/LoggedIn", function(request, response, next){
 	});
 
 });
-
+//Register account.
 router.get("/add", function(request, response, next){
 
 	response.render("sample_data", {title:'Register account with us', action:'add'});
@@ -47,12 +59,49 @@ router.post("/add_sample_data", function(request, response, next){
 	var email = request.body.email;
 
 	var password = request.body.password;
+    var query = `SELECT * FROM sample_data WHERE email="${email}"`;
+	database.query(query, function(error, data){
 
-	var query = `
-	INSERT INTO sample_data 
-	(first_name, last_name, password, email) 
-	VALUES ("${first_name}", "${last_name}", "${password}", "${email}")
-	`;
+		if(error)
+		{
+			throw error;
+		}	
+		else
+		{
+
+            if(data.length > 0)
+            {
+                response.redirect("/sample_data/UserError") 
+            }
+            else 
+            {
+                var query = `INSERT INTO sample_data (first_name, last_name, password, email) VALUES ("${first_name}", "${last_name}", "${password}", "${email}")`;
+                database.query(query, function(error, data){
+                    if(error)
+                    {
+                        throw error;
+                    }
+                    else 
+                    {
+                        response.redirect("/sample_data/LoggedIn");
+                    }
+
+                });
+            }
+		}
+
+	});
+
+});
+
+//User login handeling.
+router.post("/login_sample_data", function(request, response, next){
+
+	var mail = request.body.email;
+
+	var password = request.body.password;
+
+	var query = `SELECT * FROM sample_data WHERE email="${mail}" AND password="${password}"`;
 
 	database.query(query, function(error, data){
 
@@ -62,7 +111,14 @@ router.post("/add_sample_data", function(request, response, next){
 		}	
 		else
 		{
-			response.redirect("/sample_data/LoggedIn");
+            if(data.length > 0)
+            {
+                response.redirect(`/sample_data/LoggedIn?username=${mail}`);   
+            }
+            else 
+            {
+                response.redirect("/sample_data/Error")
+            }
 		}
 
 	});

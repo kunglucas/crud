@@ -21,7 +21,7 @@
             <div class="card">
                 <div class="card-header">Sample Form</div>
                 <div class="card-body">
-                    <form method="POST" action="/sample_data/add_sample_data?username=blablabla"> <!--Use this for login check also-->
+                    <form method="POST" action="/sample_data/add_sample_data"> <!--Use this for login check also-->
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -74,9 +74,8 @@
                             <tr>
                                 <th>First Name</th>
                                 <th>Last Name</th>
-                                <th>Age</th>
+                                <th>Email</th>
                                 <th>Last seen</th>
-                                <th>Action</th>
                             </tr>
                             <%
                             if(sampleData.length > 0)
@@ -88,7 +87,6 @@
                                 <td><%= data.last_name %></td>
                                 <td><%= data.email %></td>
                                 <td><%= data.last_seen %></td>
-                                <td></td>
                             </tr>
                             <%
                                 });
@@ -110,21 +108,31 @@
             <% } else { %>
                 <a href="/sample_data/add" class="btn btn-success btn-sm float-end" style="font-weight:bold;">Register account</a>
                 <div style="background-color:rgb(212, 212, 212);">
-                    <form style="padding:20px;">
+                    <form style="padding:20px;" action="/sample_data/login_sample_data" method="POST">
                         <div class="mb-3">
                           <label for="exampleInputEmail1" class="form-label">Email address</label>
-                          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                          <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
                           <div id="emailHelp" class="form-text">We'll share your email with anyone else.</div>
                         </div>
                         <div class="mb-3">
                           <label for="exampleInputPassword1" class="form-label">Password</label>
-                          <input type="password" class="form-control" id="exampleInputPassword1">
+                          <input type="password" name="password" class="form-control" id="exampleInputPassword1" required>
                         </div>
                         <button type="submit" class="btn btn-danger" style="font-weight:bold;">Submit</button>
                       </form>
                 </div>
             <% } %>
 
+            <% if(action == 'Error') { %>
+                <div class="alert alert-warning" style="margin-top:4rem;" role="alert">
+                    We could not find any account with the credentials you entered, would you like to register?
+                  </div>
+            <% } %>
+            <% if(action == 'User') { %>
+                <div class="alert alert-warning" style="margin-top:4rem;" role="alert">
+                    User already registered..
+                  </div>
+                  <% } %>
 
         </div> 
 
