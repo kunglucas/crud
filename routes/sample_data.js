@@ -83,7 +83,7 @@ router.post("/add_sample_data", function(request, response, next){
                     }
                     else 
                     {
-                        response.redirect("/sample_data/LoggedIn");
+                        response.redirect("/sample_data/LoggedIn?username=`${first_name}`");
                     }
 
                 });

@@ -15,7 +15,6 @@
     <body>
         <div class="container">
             <h1 class="text-center mt-3 mb-3"><%= title %></h1>
-            
             <% if(action == 'add') { %>
 
             <div class="card">
@@ -58,7 +57,22 @@
             </div>
 
             <% } else if(action == 'LoggedIn') { %>
-                
+
+            <script type="text/javascript">
+                var params = new window.URLSearchParams(window.location.search);
+                var usr = params.get('username');  
+                console.log(usr);    
+                if (usr === undefined || usr === null) {
+                    location.href = '/sample_data';
+                }
+                window.onload = function(){  
+                document.getElementById("p1").innerHTML = "Welcome, " + usr;  
+                }  
+                if(usr.length < 1 && usr !== null)
+                {
+                    console.log('not set');
+                }
+             </script>
             <div class="card">
                 <div class="card-header">
                     <div class="row">
@@ -69,6 +83,9 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    <div class="alert alert-primary" role="alert">
+                        <p id="p1">Hello World!</p>
+                      </div>
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <tr>
@@ -80,8 +97,10 @@
                             <%
                             if(sampleData.length > 0)
                             {
-                                sampleData.forEach(function(data){
-                            %>
+                                <!-- Looping through table. -->
+                                sampleData.forEach(function(data){ 
+                                
+                            %>     
                             <tr>
                                 <td><%= data.first_name %></td>
                                 <td><%= data.last_name %></td>
